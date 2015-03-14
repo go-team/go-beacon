@@ -1,4 +1,6 @@
 class DeviceController < ApplicationController
+  before_action :auth_admin
+
   def register
     d = Device.find_by_uuid(params[:uuid])
     if d == nil

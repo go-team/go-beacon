@@ -42,16 +42,16 @@ RSpec.describe DeviceController, type: :controller do
     end
   end
 
-  describe "registration with without auto" do
+  describe "registration without auth" do
 
     it "should succesfully register a device" do
       put :register, {:uuid => "abcblueid123" , :admin_key => ''}
-      expect(response).to be_unauthorized
-
+      expect(response.code).to eq("401")
+    end
     it "should succesfully deregister a device" do
       d = Device.create(:uuid => "abcblueid123")
       put :deregister, {:uuid => d.uuid , :admin_key => ''}
-      expect(response).to be_unauthorized
+      expect(response.code).to eq("401")
     end
 
 
