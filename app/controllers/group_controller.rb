@@ -13,11 +13,14 @@ class GroupController < ApplicationController
 	end
 
 	def add_device
+		@GroupController = Group.find_or_create_by_id(params[:id])
+		@GroupController.devices << Device.find_or_create_by_uuid(params[:uuid])
 		render :json=>{success: 1}.to_json, :calback => params['callback']
 	end
 
 	def remove_device
-
+		@GroupController = Group.find_or_create_by_id(params[:id])
+		@GroupController.devices.destroy Device.find_or_create_by_uuid(params[:uuid])
 		render :json=>{success: 1}.to_json, :calback => params['callback']
 	end
 
