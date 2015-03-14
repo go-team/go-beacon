@@ -23,32 +23,35 @@ RSpec.describe GroupController, type: :controller do
   end
 
   describe "group api responses " do
+    before :each do
+      @group_id = 1
+      g = Group.find_or_create_by_id(@group_id)
+    end
     it "should render a numeric group id on create" do
       put :create
       expect(response).to be_success 
-      response.body.should be_kind_of(Fixnum)
+      JSON.parse(response.body)['id'].should be_kind_of(Fixnum)
     end
 
     it "should accept a callback" do
-      put :set_callback, {:callback => "http://beacon.example.com/"}
+      put :set_callback, {:id => @group_id, :callback => "http://beacon.example.com/"}
       expect(response).to be_success 
     end
 
     it "should add a device" do
-      put :add_device, {:bluetooth_id => "abcdid123"}
+      put :add_device, {:id => @group_id, :uuid => "abcdid123"}
       expect(response).to be_success 
     end
 
     it "should remove a device" do
-      put :remove_device, {:bluetooth_id => "abcdid123"}
+      put :remove_device, {:id => @group_id, :uuid => "abcdid123"}
       expect(response).to be_success 
     end
 
     it "should delete itself" do
-      g = Group.create()
-      put :delete, {:id => g.id}
+      put :delete, {:id => @group_id}
       expect(response).to be_success 
-      expect(Group.find(g.id)).to be_nil
+      expect(Group.find_by_id(@group_id)).to be_nil
     end
   end
 end
