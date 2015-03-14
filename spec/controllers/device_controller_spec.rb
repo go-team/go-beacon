@@ -21,7 +21,7 @@ RSpec.describe DeviceController, type: :controller do
       result = JSON.parse(response.body)
       expect(result).to include('uuid')
       expect(result['uuid']).to eq "abcblueid123"
-      expect(Devise.find_by_uuid("abcblueid123")).not_to be nil
+      expect(Device.find_by_uuid("abcblueid123")).not_to be nil
 
     end
     it "should succesfully deregister a device" do
