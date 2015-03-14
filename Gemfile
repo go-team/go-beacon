@@ -10,6 +10,15 @@ gem 'unicorn'
 # Use postgresql as the database for Active Record
 gem 'pg'
 
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'rspec-expectations'
+  gem 'rake'
+  gem 'simplecov'
+  gem 'database_cleaner'
+  gem 'cucumber-rails', :require => false
+end
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 

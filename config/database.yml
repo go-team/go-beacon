@@ -17,7 +17,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: ruby-rails-sample_development
+  database: go-beacon-dev
   pool: 5
 
   # Connect on a TCP socket. Omitted by default since the client uses a
@@ -41,14 +41,17 @@ development:
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
-test:
+test: &test
   adapter: postgresql
   encoding: unicode
-  database: ruby-rails-sample_test
+  database: go-beacon-test
   pool: 5
 
 production:
   adapter: postgresql
   encoding: unicode
-  database: ruby-rails-sample_production
+  database: go-beacon-production
   pool: 5
+
+cucumber:
+  <<: *test
