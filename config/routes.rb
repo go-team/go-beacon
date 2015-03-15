@@ -1,19 +1,18 @@
 RubyRailsSample::Application.routes.draw do
   root 'welcome#index'
 
-  resources :group
-  put '/group/create' => 'group#create'
-  put '/group/set_callback' => 'group#set_callback'
-  put '/group/add_device' => 'group#add_device'
-  put '/group/remove_device' => 'group#remove_device'
-  put '/group/delete' => 'group#delete'
+  match 'device/register/:uuid/:admin_key', :to => 'device#register', :format => false, :as => :register_device, :via => [:put, :get]
+  match 'device/deregister/:uuid/:admin_key', :to => 'device#deregister', :format => false, :as => :deregister_device, :via => [:put, :get]
+
+  match 'device/report_interaction/:uuid/', :to => 'device#report_interaction', :format => false, :as => :interact_device, :via => [:put, :get]
+
+  match '/group/create' => 'group#create', :via => [:put, :get]
+  match '/group/:id/set_callback' => 'group#set_callback', :via => [:put, :get]
+  match '/group/add_device' => 'group#add_device', :via => [:put, :get]
+  match '/group/remove_device' => 'group#remove_device', :via => [:put, :get]
+  match '/group/delete' => 'group#delete', :via => [:put, :get]
 
 
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  match 'device/register/:uuid', :to => 'device#register', :format => false, :as => :register_device, :via => [:put]
-  match 'device/deregister/:uuid', :to => 'device#deregister', :format => false, :as => :deregister_devise, :via => [:put]
-
+  match 'credentials/create', :to => 'user#create', :format => false, :as => :credentials_new, :via => [:post, :get]
 
 end
