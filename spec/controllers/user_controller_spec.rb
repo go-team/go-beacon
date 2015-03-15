@@ -8,7 +8,6 @@ RSpec.describe UserController, type: :controller do
     end
   end
 
-
   describe "UserController api responses " do
     it "Creating a user should return the appropriate keys" do
       put :create

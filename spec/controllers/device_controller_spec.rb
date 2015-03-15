@@ -10,7 +10,6 @@ RSpec.describe DeviceController, type: :controller do
     end
   end
 
-
   describe "registration with auth" do
     before(:each) do
       @user = User.create
