@@ -10,7 +10,6 @@ RSpec.describe GroupController, type: :controller do
     it "should respond to set_callback" do
       GroupController.new.should respond_to(:set_callback)
     end
-
     it "should respond to add_device" do
       GroupController.new.should respond_to(:add_device)
     end
@@ -20,49 +19,78 @@ RSpec.describe GroupController, type: :controller do
     it "should respond to delete" do
       GroupController.new.should respond_to(:delete)
     end
+  end
 
+  describe "create" do
     it "should render a numeric group id on create" do
       put :create
       expect(response).to be_success 
       JSON.parse(response.body)['id'].should be_kind_of(Fixnum)
     end
-
-  end
-
-  describe "group create" do
-    it "should render a numeric group id on create" do
+    it "should create a new group" do
+      pre_count = Group.all.count
       put :create
-      expect(response).to be_success 
-      JSON.parse(response.body)['id'].should be_kind_of(Fixnum)
+      curr_count = Group.all.count
+      pre_count.should eq(curr_count - 1)
     end
   end
 
   describe "group api responses " do
     before :each do
-      @group_id = 1
-      g = Group.find_or_create_by_id(@group_id)
+      @group = Group.create()
     end
 
-
-    it "should accept a callback" do
-      put :set_callback, {:id => @group_id, :callback => "http://beacon.example.com/"}
-      expect(response).to be_success 
+    describe "set_callback " do
+      before :each do
+        @callback_url = "http://beacon.example.com/"
+        put :set_callback, {:id => @group.id, :callback => @callback_url}
+      end
+      it "should send good response" do
+        expect(response).to be_success 
+      end
+      it "should set callback correctly " do
+        @group.callback_url.should eq(@callback_url)
+      end
     end
 
-    it "should add a device" do
-      put :add_device, {:id => @group_id, :uuid => "abcdid123"}
-      expect(response).to be_success 
+    describe "add_device " do
+      before :each do
+        @uuid = "abcdid123"
+        put :add_device, {:id => @group.id, :uuid => @uuid}
+      end
+      it "should send good response" do
+        expect(response).to be_success 
+      end
+      it "should sets callback correctly " do
+        @group.devices.include?(Device.find_by_uuid(@uuid)).should be_truthy
+      end
     end
 
-    it "should remove a device" do
-      put :remove_device, {:id => @group_id, :uuid => "abcdid123"}
-      expect(response).to be_success 
+    describe "remove_device " do
+      before :each do
+        @uuid = "abcdid123"
+        put :add_device, {:id => @group.id, :uuid => @uuid}
+        put :remove_device, {:id => @group.id, :uuid => @uuid}
+      end
+      it "should send good response" do
+        expect(response).to be_success 
+      end
+      it "should sets callback correctly " do
+        @group.devices.include?(Device.find_by_uuid(@uuid)).should be_falsey
+      end
     end
 
-    it "should delete itself" do
-      put :delete, {:id => @group_id}
-      expect(response).to be_success 
-      expect(Group.find_by_id(@group_id)).to be_nil
+    describe "delete " do
+      before :each do
+        put :delete, {:id => @group.id}
+      end
+      it "should send good response " do
+        expect(response).to be_success 
+      end
+      it "should delete itself " do
+        expect(Group.find_by_id(@group.id)).to be_nil
+      end
     end
+
   end
 end

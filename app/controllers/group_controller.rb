@@ -1,32 +1,38 @@
 class GroupController < ApplicationController
 
 	def create
-		@GroupController = Group.create
-		puts @GroupController
-		render :json=>{id: @GroupController.id}.to_json, :calback => params['callback']
+		@Group = Group.create
+		puts @Group
+		render :json=>{id: @Group.id}.to_json, :calback => params['callback']
 	end
 
 	def set_callback
-		@GroupController = Group.find_or_create_by_id(params[:id])
-		@GroupController.update_attribute(:callback_url, params[:callback])
+		@Group = Group.find_or_create_by_id(params[:id])
+		@Group.update_attribute(:callback_url, params[:callback])
+		render :json=>{success: 1}.to_json, :calback => params['callback']
+	end
+
+	def send_callback(uuid, msg)
+		@Group = Group.find_or_create_by_id(params[:id])
+		put @Group.callback_url, {uuid: uuid, msg: msg}.to_json
 		render :json=>{success: 1}.to_json, :calback => params['callback']
 	end
 
 	def add_device
-		@GroupController = Group.find_or_create_by_id(params[:id])
-		@GroupController.devices << Device.find_or_create_by_uuid(params[:uuid])
+		@Group = Group.find_or_create_by_id(params[:id])
+		@Group.devices << Device.find_or_create_by_uuid(params[:uuid])
 		render :json=>{success: 1}.to_json, :calback => params['callback']
 	end
 
 	def remove_device
-		@GroupController = Group.find_or_create_by_id(params[:id])
-		@GroupController.devices.destroy Device.find_or_create_by_uuid(params[:uuid])
+		@Group = Group.find_or_create_by_id(params[:id])
+		@Group.devices.destroy Device.find_or_create_by_uuid(params[:uuid])
 		render :json=>{success: 1}.to_json, :calback => params['callback']
 	end
 
 	def delete
-		@GroupController = Group.find_or_create_by_id(params[:id])
-		@GroupController.destroy
+		@Group = Group.find_or_create_by_id(params[:id])
+		@Group.destroy
 		render :json=>{success: 1}.to_json, :calback => params['callback']
 	end
 
