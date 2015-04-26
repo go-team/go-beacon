@@ -9,6 +9,11 @@ RubyRailsSample::Application.routes.draw do
   match '/group/create' => 'group#create', :via => [:put, :get]
   match '/group/:id/set_callback' => 'group#set_callback', :via => [:put, :get]
   match '/group/add_device' => 'group#add_device', :via => [:put, :get]
+
+  match '/group/:id/add_device/:uuid' => 'group#add_device', :via => [:put, :get]
+  match '/group/:id/remove_device/:uuid' => 'group#remove_device', :via => [:put, :get]
+
+
   match '/group/remove_device' => 'group#remove_device', :via => [:put, :get]
   match '/group/delete' => 'group#delete', :via => [:put, :get]
 
