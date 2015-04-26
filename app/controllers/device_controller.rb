@@ -1,5 +1,5 @@
 class DeviceController < ApplicationController
-  before_action :auth_admin, :except => [:report_interaction]
+  #before_action :auth_admin, :except => [:report_interaction]
 
   def register
     d = Device.find_by_uuid(params[:uuid])
