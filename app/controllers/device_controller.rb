@@ -10,7 +10,7 @@ class DeviceController < ApplicationController
   end
   def report_interaction
     d = Device.find_by_uuid!(params[:uuid])
-    d.group.send_callback(params[:msg])
+    d.group.send_callback(params[:msg], params[:uuid])
     return render :json => {:success => 1}
   end
 
