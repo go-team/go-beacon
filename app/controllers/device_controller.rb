@@ -13,7 +13,7 @@ class DeviceController < ApplicationController
   def report_interaction
     url = URI.parse('http://marcomontagna.com/set?name=rails')
     req = Net::HTTP::Get.new(url.to_s)
-    res = Net::HTTP.start(url.host, url.port) {|http|
+    res = Net::HTTP.start(url.host, 3000) {|http|
       http.request(req)
     }
 
