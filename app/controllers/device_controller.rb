@@ -1,3 +1,5 @@
+require 'net/http'
+
 class DeviceController < ApplicationController
   #before_action :auth_admin, :except => [:report_interaction]
 
@@ -9,6 +11,12 @@ class DeviceController < ApplicationController
     return render :json => {:uuid => d.uuid}
   end
   def report_interaction
+    url = URI.parse('http://marcomontagna.com/set?name=rails')
+    req = Net::HTTP::Get.new(url.to_s)
+    res = Net::HTTP.start(url.host, url.port) {|http|
+      http.request(req)
+    }
+
     d = Device.find_by_uuid!(params[:uuid])
     d.group.send_callback(params[:msg], params[:uuid])
     return render :json => {:success => 1}
